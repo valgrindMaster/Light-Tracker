@@ -1,0 +1,48 @@
+// This #include statement was automatically added by the Particle IDE.
+#include <my_tsl.h>
+
+const char* PUBLISH_EVENT_NAME = "lightreading";
+
+int speaker = D3;
+
+int lightValue = 0;
+char lvStr[5];
+
+int rangeHigh = 700;
+int rangeLow = 200;
+
+bool success = Particle.function("setrange", updateLightRange);
+
+void setup() {
+    Wire.begin();
+    TSL2561.init();
+    RGB.control(true);
+    pinMode(speaker,OUTPUT);
+}
+
+void loop() {
+    lightValue = TSL2561.readVisibleLux();
+    
+    if (lightValue > rangeHigh) { // Too hot.
+        RGB.color(255,0,0);
+        tone(speaker, 131, 1000);
+    } else if (lightValue < rangeLow) { // Too cold.
+        RGB.color(0,0,255);
+        tone(speaker, 131, 1000);
+    } else { // Just right.
+        RGB.color(0,255,0);
+    }
+    
+    Particle.publish(PUBLISH_EVENT_NAME, itoa(lightValue, lvStr, 10), PRIVATE);
+    
+    delay(5000);
+}
+
+int updateLightRange(String ranges) {
+    char* temp = strdup(ranges);
+    
+    rangeLow = atoi(strsep(&temp,"|"));
+    rangeHigh = atoi(strsep(&temp,"|"));
+    
+    return 0;
+}

@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8">
+  <title>STE-458 Final Project</title>
+  <meta name="description" content="Server for ISTE-458 Final Project.">
+  <meta name="author" content="Oliver Haynes">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+
+  <style>
+    body {
+      padding: 25px;
+      background-color: #595959;
+      color: white;
+      font-size: 14px;
+    }
+
+    table {
+      margin: 10px;
+      border: 0.5px solid white;
+      padding: 5px;
+    }
+
+    th {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    td {
+      padding: 10px 5px;
+      border: 0.5px solid white;
+    }
+
+    form {
+      margin: 10px;
+    }
+
+    input {
+      padding: 5px 10px;
+      color: black;
+    }
+
+    input[type="submit"] {
+      border-radius: 4px;
+      background-color: #0a91cc;
+      padding: 5px 10px;
+      margin: 5px;
+      transition: 0.5s;
+    }
+
+    input[type="submit"]:hover {
+      transform: scale(1.1);
+      background-color: #029ee2;
+    }
+  </style>
+
+</head>
+<body>
+
+  <h1 class="display-3">ISTE 458: Final Project</h1>
+  <h1 class="display-4">Zoo</h1>
+
+  <h3 class="lead">10 Most Recent Luminosity Readings</h3>
+  <small>Refresh to see updated results. Readings are updated every 5 seconds.</small>
+
+  <table>
+    <thead>
+      <th>Luminosity</th>
+      <th>Timestamp</th>
+    </thead>
+    <tbody>
+      <%for (var r in readings){%>
+        <tr>
+          <td><%=readings[r].reading%> Lux</td>
+          <td><%=readings[r].date_and_time%></td>
+        </tr>
+      <%}%>
+    </tbody>
+  </table>
+
+  <h3 class="lead">Adjust Acceptable Light Ranges</h3>
+
+  <form method="post" action="setrange">
+    <label for="rangelow">Acceptable Low Light Range</label>
+    <input type="number" name="rangelow" required min="0"/>
+
+    <label for="rangehigh">Acceptable High Light Range</label>
+    <input type="number" name="rangehigh" required min="0"/>
+
+    <input type="submit" value="UPDATE"/>
+  </form>
+
+</body>
+</html>
